@@ -1,47 +1,49 @@
+import mongoose from "mongoose";
+import User from "../model/user.js";
 
-// const fs = require('fs')
-import fs from "fs"
-const data = JSON.parse(fs.readFileSync('data.json', 'utf-8'));
-let users = data.users;
+const getAllUsers = async (req, res) => {
+  const users = await User.find();
+  res.json(users);
+};
 
-const createUsers = (req,res)=> {
-    // must set express.json() built in middleware to parse incoming json in req.body
-    const user = req.body;
-    console.log(user);
-    
-    users = [...users, user];
-    res.json(users);
-    // res.json({type:"post"})
-}
+const getUser = async (req, res) => {
+  const id = req.params.id;
+  console.log({id})
+  const user = await User.findById(id);
+  res.json(user);
+};
+const changeUser = async (req, res) => {
+  const id = req.params.id;
+  try{
+  const doc = await User.findOneAndReplace({_id:id},req.body,{new:true})
+  res.status(201).json(doc);
+  }
+  catch(err){
+    console.log(err);
+    res.status(400).json(err);
+  }
+};
+const updateUser = async (req, res) => {
+  const id = req.params.id;
+  try{
+  const doc = await User.findOneAndUpdate({_id:id},req.body,{new:true})
+  res.status(201).json(doc);
+  }
+  catch(err){
+    console.log(err);
+    res.status(400).json(err);
+  }
+};
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try{
+  const doc = await User.findOneAndDelete({_id:id})
+  res.status(201).json(doc);
+  }
+  catch(err){
+    console.log(err);
+    res.status(400).json(err);
+  }
+};
 
-const getUsers = (req,res)=>{
-    res.json(users);
-}
-
-const getUserById = (req,res)=>{
-    const id = Number(req.params.id);
-    const user = users.find(p=>p.id === id);
-    res.json(user);
-}
-
-const changeUser = (req,res)=>{
-    const value = req.body;
-    const id = Number(req.params.id);
-    users =  users.map(p=> p.id === id ? value : p);
-    res.send({"message": "successful"})
-}
-
-const updateUser = (req,res)=>{
-    const value = req.body;
-    const id = Number(req.params.id);
-    users =  users.map(p=> p.id === id ? {...p, ...value} : p);
-    res.send({"message": "successful"})
-}
-
-const deleteUser = (req,res)=>{
-    const id = Number(req.params.id);
-    users = users.filter(p=> p.id !==id)
-    res.json(users);
-}
-
-export {createUsers, getUserById, getUsers, updateUser, deleteUser, changeUser}
+export {getAllUsers, getUser, updateUser, deleteUser, changeUser}

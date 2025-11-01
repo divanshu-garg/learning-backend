@@ -6,6 +6,7 @@ import {
   updateProduct,
   deleteProduct,
   changeProduct,
+  getProductsSSR
 } from "../controller/product.js";
 
 const productRouter = e.Router();
@@ -14,6 +15,7 @@ const productRouter = e.Router();
 productRouter.post("/", createProducts);
 // READ GET /products
 productRouter.get("/", getProducts);
+productRouter.get("/ssr", getProductsSSR);
 // READ GET /products/:id
 productRouter.get("/:id", getProductById);
 

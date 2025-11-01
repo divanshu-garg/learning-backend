@@ -1,9 +1,7 @@
 import e from "express";
 import {
-  createUsers,
-  getUserById,
-  getUsers,
   updateUser,
+  getAllUsers,
   deleteUser,
   changeUser,
 } from "../controller/user.js";
@@ -11,9 +9,8 @@ import {
 const userRouter = e.Router();
 
 userRouter
-  .post("/", createUsers)
-  .get("/", getUsers)
-  .get("/:id", getUserById)
+  .get("/", getAllUsers)
+  // .get("/:id", getUserById)
   .put("/:id", changeUser)
   .patch("/:id", updateUser)
   .delete("/:id", deleteUser);
